@@ -22,8 +22,8 @@ export default class DailyCo extends VideoInterface {
       this.emit('error', e);
     });
   }
-  join(url: string) {
-    return this.library.join({ url });
+  join(config) {
+    return this.library.join(config);
   }
 
   leave() {
@@ -50,6 +50,8 @@ export default class DailyCo extends VideoInterface {
   cycleCamera() {
     return this.library.cycleCamera();
   }
+
+  localParticipant() {}
 
   participants() {
     return Object.entries(this.library.participants()).reduce(

@@ -8,12 +8,31 @@ npm install --save video-provider-interface
 
 ```jsx
 import VideoProvider from 'video-provider-interface';
+const VP = new VideoProvider(VideoProviderLibrary, 'videoProverName');
+```
+
+daily co:
+
+```jsx
+import DailyIframe from '@daily-co/daily-js';
+import VideoProvider from 'video-provider-interface';
+...
+const newCallObject = DailyIframe.createCallObject();
 const VP = new VideoProvider(newCallObject, 'dailyco');
+```
+
+twilio:
+
+```jsx
+const Video = require('twilio-video');
+import VideoProvider from 'video-provider-interface';
+...
+const VP = new VideoProvider(Video, 'twilio');
 ```
 
 ## methods:
 
-- join(url: string): void;
+- join(config: any): void; // VP.join({url: dailyCoURL})
 - leave(): void;
 - destroy(): void;
 - startScreenShare(): void;
@@ -21,6 +40,20 @@ const VP = new VideoProvider(newCallObject, 'dailyco');
 - participants(): Participant[];
 - meetingState(): string;
 - cycleCamera(): void;
+
+### join
+
+dailyco:
+
+```jsx
+VP.join({ url: 'urlToRoom' });
+```
+
+twilio:
+
+```jsx
+VP.join({ token: 'token', roomName: 'roomName' });
+```
 
 ## Events
 

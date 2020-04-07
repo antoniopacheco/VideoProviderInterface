@@ -11,7 +11,7 @@ export abstract class VideoInterface {
   constructor(props: any) {
     this.library = props.library;
   }
-  abstract join(url: string): void;
+  abstract join(config: any): void;
   abstract leave(): void;
   abstract destroy(): void;
   abstract startScreenShare(): void;
