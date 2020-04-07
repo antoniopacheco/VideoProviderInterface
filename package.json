@@ -25,8 +25,11 @@
   "author": "Antonio Pacheco",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "esnext": "^3.3.1",
+    "jest": "^25.2.7",
     "prettier": "^2.0.4",
+    "ts-jest": "^25.3.1",
     "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"

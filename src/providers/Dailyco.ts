@@ -54,7 +54,6 @@ export default class DailyCo extends VideoInterface {
   participants() {
     return Object.entries(this.library.participants()).reduce(
       (ac: any[], [key, val]: [string, any]) => {
-        debugger;
         const { audioTrack, videoTrack, screenVideoTrack } = val;
         ac.push({
           id: key,

@@ -42,9 +42,7 @@ export abstract class VideoInterface {
 
   off(name: string, callBack: any): void {
     if (this.listeners[name]) {
-      this.listeners[name].findIndex((el: any) => {
-        el.callBack === callBack;
-      });
+      this.listeners[name].findIndex((el: any) => el.callBack === callBack);
     }
   }
 
@@ -54,7 +52,7 @@ export abstract class VideoInterface {
 
   emit(name: string, params: any): void {
     if (this.listeners[name]) {
-      let indexesToDelete: any[] = [];
+      const indexesToDelete: any[] = [];
       this.listeners[name].forEach((action: any, index: number) => {
         action.callBack(params);
         if (action.oneTime) {
