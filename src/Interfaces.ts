@@ -1,6 +1,7 @@
 export interface Participant {
-  videoTrack: MediaStreamTrack;
-  audioTrack: MediaStreamTrack;
+  videoTrack: any;
+  audioTrack: any;
+  screenVideoTrack: any;
   isLocal: boolean;
 }
 
@@ -16,6 +17,8 @@ export abstract class VideoInterface {
   abstract startScreenShare(): void;
   abstract stopScreenShare(): void;
   abstract participants(): Participant[];
+  abstract meetingState(): string;
+  abstract cycleCamera(): void;
 
   addListener(name: string, callBack: any, oneTime: boolean): any {
     if (!this.listeners[name]) {
@@ -37,15 +40,23 @@ export abstract class VideoInterface {
     return this.addListener(name, callBack, false);
   }
 
+  off(name: string, callBack: any): void {
+    if (this.listeners[name]) {
+      this.listeners[name].findIndex((el: any) => {
+        el.callBack === callBack;
+      });
+    }
+  }
+
   once(name: string, callBack: any): any {
     return this.addListener(name, callBack, true);
   }
 
-  emit(name: string): void {
+  emit(name: string, params: any): void {
     if (this.listeners[name]) {
       let indexesToDelete: any[] = [];
       this.listeners[name].forEach((action: any, index: number) => {
-        action.callBack();
+        action.callBack(params);
         if (action.oneTime) {
           indexesToDelete.push(index);
         }
@@ -54,5 +65,8 @@ export abstract class VideoInterface {
         this.listeners[name].splice(i, 1);
       });
     }
+  }
+  clearListeners(): void {
+    this.listeners = {};
   }
 }

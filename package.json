@@ -1,6 +1,6 @@
 {
   "name": "video-provider-interface",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Interface to switch between different video Stream Providers",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -25,6 +25,7 @@
   "author": "Antonio Pacheco",
   "license": "ISC",
   "devDependencies": {
+    "esnext": "^3.3.1",
     "prettier": "^2.0.4",
     "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",
