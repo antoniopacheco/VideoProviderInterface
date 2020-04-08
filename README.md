@@ -84,3 +84,10 @@ clear all events
 ```jsx
 VP.clearListeners();
 ```
+
+## features supported
+
+| Provider | Mute Camera        | Mute Audio         | Cycle Camera       | Screen Share       | Leave              |
+| -------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ |
+| daily.co | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| twilio   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :soon:             | :heavy_check_mark: |
