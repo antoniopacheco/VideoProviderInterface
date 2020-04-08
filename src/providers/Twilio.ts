@@ -115,7 +115,6 @@ export default class Twilio extends VideoInterface {
           this.emit('error', e);
         }
       });
-    // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
     return null;
   };
   stopScreenShare() {
@@ -123,7 +122,6 @@ export default class Twilio extends VideoInterface {
     this.room.localParticipant.unpublishTrack(currentSSTrack);
     currentSSTrack.stop();
     this.emit('participant-updated', null);
-    // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
     return null;
   }
   participants = () => {
@@ -194,7 +192,7 @@ export default class Twilio extends VideoInterface {
     }
     return 'joining';
   }
-  setLocalVideo = (muted: boolean) => {
+  setLocalVideo = (mute: boolean) => {
     const { localParticipant } = this.room;
     if (muted) {
       if (localParticipant) {
@@ -224,8 +222,18 @@ export default class Twilio extends VideoInterface {
         });
     }
   };
-  setLocalAudio(muted: boolean) {
-    return this.library.setLocalAudio(muted);
+  setLocalAudio(mute: boolean) {
+    const [audioTrack, video] = this.getTracksFromParticipant(
+      this.room.localParticipant,
+    );
+    if (audioTrack) {
+      if (mute) {
+        audioTrack.enabled = false;
+      } else {
+        audioTrack.enabled = true;
+      }
+      this.emit('participant-updated', 'audio-changed');
+    }
   }
 
   cycleCamera = () => {

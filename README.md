@@ -88,7 +88,19 @@ VP.clearListeners();
 
 ## features supported
 
-| Provider | Mute Camera        | Mute Audio         | Cycle Camera       | Screen Share       | Leave              |
-| -------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ |
-| daily.co | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| twilio   | :heavy_check_mark: | :soon:             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+EE = Everyone Else
+
+| Feature           | Function Name          | DailyCo            | Twilio             |
+| ----------------- | ---------------------- | ------------------ | ------------------ |
+| Join              | join(config)           | :heavy_check_mark: | :heavy_check_mark: |
+| Leave             | leave()                | :heavy_check_mark: | :heavy_check_mark: |
+| Mute Camera       | setLocalVideo(Boolean) | :heavy_check_mark: | :heavy_check_mark: |
+| Mute Audio        | setLocalAudio(Boolean) | :heavy_check_mark: | :heavy_check_mark: |
+| Cycle Camera      | cycleCamera()          | :heavy_check_mark: | :heavy_check_mark: |
+| start ScreenShare | startScreenShare()     | :heavy_check_mark: | :heavy_check_mark: |
+| Select Camera     | selectCamera(deviceId) | :soon:             | :soon:             |
+| get Cameras       | getCameras()           | :soon:             | :soon:             |
+| mute EE Audio     | muteEEAudio()          | :soon:             | :soon:             |
+| mute EE Video     | muteEEVideo()          | :soon:             | :soon:             |
+| kick out          | kick(id)               | :soon:             | :soon:             |
+| Adjust Volume     | setVolume(level)       | :soon:             | :soon:             |

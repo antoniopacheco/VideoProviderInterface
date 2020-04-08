@@ -25,8 +25,8 @@ export default class DailyCo extends VideoInterface {
   setLocalVideo(muted: boolean) {
     return this.library.setLocalVideo(muted);
   }
-  setLocalAudio(muted: boolean) {
-    return this.library.setLocalAudio(muted);
+  setLocalAudio(mute: boolean) {
+    return this.library.setLocalAudio(mute);
   }
   join(config: any) {
     return this.library.join(config);

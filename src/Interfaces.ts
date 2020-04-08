@@ -19,8 +19,8 @@ export abstract class VideoInterface {
   abstract participants(): Participant[];
   abstract meetingState(): string;
   abstract cycleCamera(): void;
-  abstract setLocalVideo(muted: boolean): void;
-  abstract setLocalAudio(muted: boolean): void;
+  abstract setLocalVideo(mute: boolean): void;
+  abstract setLocalAudio(mute: boolean): void;
 
   addListener(name: string, callBack: any, oneTime: boolean): any {
     if (!this.listeners[name]) {
