@@ -29,7 +29,7 @@ export default class Twilio extends VideoInterface {
       }
       this.emit('participant-joined', participant);
     });
-    //events for when local participant change
+    // events for when local participant change
     this.room.localParticipant.on('trackUnpublished', (track: any) => {
       this.emit('participant-updated', 'trackUnpublished');
     });
@@ -69,14 +69,18 @@ export default class Twilio extends VideoInterface {
 
   leave() {
     this.room.disconnect();
-    //TODO
   }
-  destroy() {}
+  destroy() {
+    // TODO
+    return null;
+  }
   startScreenShare() {
     // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
+    return null;
   }
   stopScreenShare() {
     // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
+    return null;
   }
   participants = () => {
     // todo make it same interface as dailyco
@@ -85,12 +89,14 @@ export default class Twilio extends VideoInterface {
       return all;
     }
     const local = this.room.localParticipant;
-    const [audioTrack, videoTrack] = this.getTracksFromParticipant(local);
+    const [localAudioTrack, localVideoTrack] = this.getTracksFromParticipant(
+      local,
+    );
     all.push({
       isLocal: true,
       id: 'local',
-      audioTrack,
-      videoTrack,
+      audioTrack: localAudioTrack,
+      videoTrack: localVideoTrack,
       screenVideoTrack: null,
     });
     if (this.room.participants) {
@@ -132,7 +138,6 @@ export default class Twilio extends VideoInterface {
       case 'connected':
         return 'joined-meeting';
       default:
-        debugger;
         return 'TODO';
       // left-meeting
       // error
@@ -180,7 +185,7 @@ export default class Twilio extends VideoInterface {
       return device.label === currentTrack.mediaStreamTrack.label;
     });
     const nextIndex =
-      currentIndex == this.videoDevices.length - 1 ? 0 : currentIndex + 1;
+      currentIndex === this.videoDevices.length - 1 ? 0 : currentIndex + 1;
     this.library
       .createLocalVideoTrack({
         deviceId: { exact: this.videoDevices[nextIndex].deviceId },

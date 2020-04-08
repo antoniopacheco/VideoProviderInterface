@@ -57,8 +57,6 @@ export default class DailyCo extends VideoInterface {
     return this.library.cycleCamera();
   }
 
-  localParticipant() {}
-
   participants() {
     return Object.entries(this.library.participants()).reduce(
       (ac: any[], [key, val]: [string, any]) => {
