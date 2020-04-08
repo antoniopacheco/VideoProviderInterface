@@ -22,7 +22,7 @@ export default class DailyCo extends VideoInterface {
       this.emit('error', e);
     });
   }
-  join(config) {
+  join(config: any) {
     return this.library.join(config);
   }
 
