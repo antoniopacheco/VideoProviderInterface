@@ -194,7 +194,7 @@ export default class Twilio extends VideoInterface {
   }
   setLocalVideo = (mute: boolean) => {
     const { localParticipant } = this.room;
-    if (muted) {
+    if (mute) {
       if (localParticipant) {
         const currentVT = this.getLocalCurrentVideoTrack();
         if (currentVT) {
