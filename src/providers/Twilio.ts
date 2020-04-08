@@ -1,4 +1,12 @@
 import { VideoInterface } from '../Interfaces';
+
+interface MediaStreamTrackPublishOptions {
+  // import { LogLevels, Track } from 'twilio-video';
+  name?: string;
+  priority: any;
+  logLevel: any;
+}
+
 export default class Twilio extends VideoInterface {
   constructor(props: any) {
     super(props);
@@ -74,11 +82,47 @@ export default class Twilio extends VideoInterface {
     // TODO
     return null;
   }
-  startScreenShare() {
+  startScreenShare = () => {
+    (navigator as any).mediaDevices
+      .getDisplayMedia({
+        audio: false,
+        video: {
+          frameRate: 10,
+          height: 1080,
+          width: 1920,
+        },
+      })
+      .then((stream: any) => {
+        const track = stream.getTracks()[0];
+        // All video tracks are published with 'low' priority. This works because the video
+        // track that is displayed in the 'MainParticipant' component will have it's priority
+        // set to 'high' via track.setPriority()
+        this.room.localParticipant
+          .publishTrack(track, {
+            name: 'screen', // Tracks can be named to easily find them later
+            priority: 'low', // Priority is set to high by the subscriber when the video track is rendered
+          } as MediaStreamTrackPublishOptions)
+          .then(() => {
+            this.emit('participant-updated', null);
+          })
+          .catch((e: any) => {
+            this.emit('error', e);
+          });
+      })
+      .catch((e: any) => {
+        // Don't display an error if the user closes the screen share dialog
+        if (e.name !== 'AbortError' && e.name !== 'NotAllowedError') {
+          this.emit('error', e);
+        }
+      });
     // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
     return null;
-  }
+  };
   stopScreenShare() {
+    const currentSSTrack = this.getSSTrack(this.room.localParticipant);
+    this.room.localParticipant.unpublishTrack(currentSSTrack);
+    currentSSTrack.stop();
+    this.emit('participant-updated', null);
     // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
     return null;
   }
@@ -92,12 +136,15 @@ export default class Twilio extends VideoInterface {
     const [localAudioTrack, localVideoTrack] = this.getTracksFromParticipant(
       local,
     );
+    const localShareScreen = this.getSSTrack(local);
     all.push({
       isLocal: true,
       id: 'local',
       audioTrack: localAudioTrack,
       videoTrack: localVideoTrack,
-      screenVideoTrack: null,
+      screenVideoTrack: localShareScreen
+        ? localShareScreen.mediaStreamTrack
+        : null,
     });
     if (this.room.participants) {
       const participantKeys = Array.from(this.room.participants.keys());
@@ -106,12 +153,15 @@ export default class Twilio extends VideoInterface {
         const [audioTrack, videoTrack] = this.getTracksFromParticipant(
           participant,
         );
+        const screenVideoTrack = this.getSSTrack(participant);
         all.push({
           isLocal: false,
           id: key,
           audioTrack,
           videoTrack,
-          screenVideoTrack: null,
+          screenVideoTrack: screenVideoTrack
+            ? screenVideoTrack.mediaStreamTrack
+            : null,
         });
       });
     }
@@ -204,6 +254,15 @@ export default class Twilio extends VideoInterface {
   getDeviceIDBYlabel = (label: string) => {
     return this.videoDevices.find((device: any) => device.label === label)
       .deviceId;
+  };
+
+  // get  share screen
+  getSSTrack = (participant: any) => {
+    if (!participant.videoTracks) return null;
+    const temp: any = Array.from(participant.videoTracks).find(
+      (item: any) => item[1].trackName === 'screen',
+    );
+    return temp ? temp[1].track : null;
   };
 
   getLocalCurrentVideoTrack = () => {
