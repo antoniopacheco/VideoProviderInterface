@@ -30,6 +30,12 @@ export default class Twilio extends VideoInterface {
       this.emit('participant-joined', participant);
     });
     //events for when local participant change
+    this.room.localParticipant.on('trackUnpublished', (track: any) => {
+      this.emit('participant-updated', 'trackUnpublished');
+    });
+    this.room.localParticipant.on('trackPublished', (track: any) => {
+      this.emit('participant-updated', 'trackPublished');
+    });
     this.room.localParticipant.on('trackSubscribed', (track: any) => {
       this.emit('participant-updated', track);
     });
@@ -146,6 +152,7 @@ export default class Twilio extends VideoInterface {
           const localTrackPublication = localParticipant.unpublishTrack(
             currentVT,
           );
+          this.emit('participant-updated', 'manually on setlocal video');
           localParticipant.emit('trackUnpublished', localTrackPublication);
           currentVT.stop();
         }
@@ -158,7 +165,7 @@ export default class Twilio extends VideoInterface {
         })
         .then((localVideoTrack: any) => {
           localParticipant.publishTrack(localVideoTrack);
-          this.emit('participant-updated', null);
+          this.emit('participant-updated', 'manually on mute');
         });
     }
   };
