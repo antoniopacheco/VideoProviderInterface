@@ -6,6 +6,8 @@ export default class Twilio extends VideoInterface {
   }
   room: any;
   videoDevices: any[] = [];
+  currentDeviceId: string = '';
+
   createVideoDevices = () => {
     navigator.mediaDevices.enumerateDevices().then((devices: any[]) => {
       this.videoDevices = devices.filter(
@@ -15,9 +17,31 @@ export default class Twilio extends VideoInterface {
   };
 
   addEventListeners = () => {
-    this.room.on('participantConnected', (e: any) => {
-      this.emit('participant-joined', e);
+    // participantConnected happens when a new participant comes in
+    this.room.on('participantConnected', (participant: any) => {
+      if (participant) {
+        participant.on('trackSubscribed', (track: any) => {
+          this.emit('participant-updated', track);
+        });
+        participant.on('trackUnsubscribed', (track: any) => {
+          this.emit('participant-updated', track);
+        });
+      }
+      this.emit('participant-joined', participant);
     });
+    //events for when local participant change
+    this.room.localParticipant.on('trackSubscribed', (track: any) => {
+      this.emit('participant-updated', track);
+    });
+    this.room.localParticipant.on('trackUnsubscribed', (track: any) => {
+      this.emit('participant-updated', track);
+    });
+
+    // this.room.once('disconnected', (error: any) =>
+    //   this.room.participants.forEach((e: any) => {
+    //     this.emit('participant-left', e);
+    //   }),
+    // );
 
     this.room.on('participantDisconnected', (e: any) => {
       this.emit('participant-left', e);
@@ -37,10 +61,17 @@ export default class Twilio extends VideoInterface {
       });
   }
 
-  leave() {}
+  leave() {
+    this.room.disconnect();
+    //TODO
+  }
   destroy() {}
-  startScreenShare() {}
-  stopScreenShare() {}
+  startScreenShare() {
+    // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
+  }
+  stopScreenShare() {
+    // TODO : https://github.com/twilio/twilio-video-app-react/blob/master/src/hooks/useScreenShareToggle/useScreenShareToggle.tsx
+  }
   participants = () => {
     // todo make it same interface as dailyco
     const all: any[] = [];
@@ -58,20 +89,19 @@ export default class Twilio extends VideoInterface {
     });
     if (this.room.participants) {
       const participantKeys = Array.from(this.room.participants.keys());
-      const participants = participantKeys.map((key) => {
+      participantKeys.forEach((key) => {
         const participant = this.room.participants.get(key);
         const [audioTrack, videoTrack] = this.getTracksFromParticipant(
           participant,
         );
-        return {
+        all.push({
           isLocal: false,
           id: key,
           audioTrack,
           videoTrack,
           screenVideoTrack: null,
-        };
+        });
       });
-      all.push(...participants);
     }
     return all;
   };
@@ -88,15 +118,57 @@ export default class Twilio extends VideoInterface {
     return [audioTrack, videoTrack];
   }
   meetingState() {
-    return 'TODO';
+    const a = this.room;
+    if (!this.room) {
+      return 'TODO';
+    }
+    switch (this.room.state) {
+      case 'connected':
+        return 'joined-meeting';
+      default:
+        debugger;
+        return 'TODO';
+      // left-meeting
+      // error
+    }
+    return 'joining';
   }
-  cycleCamera = () => {
-    // const b = this.room.localParticipant;
+  setLocalVideo = (muted: boolean) => {
     const { localParticipant } = this.room;
-    const currentTracks = Array.from(localParticipant.videoTracks.values()).map(
-      (track: any) => track.track,
-    );
-    const currentTrack = currentTracks[0];
+    if (muted) {
+      if (localParticipant) {
+        const currentVT = this.getLocalCurrentVideoTrack();
+        if (currentVT) {
+          // we save current this.currentDeviceId
+          this.currentDeviceId = this.getDeviceIDBYlabel(
+            currentVT.mediaStreamTrack.label,
+          );
+          const localTrackPublication = localParticipant.unpublishTrack(
+            currentVT,
+          );
+          localParticipant.emit('trackUnpublished', localTrackPublication);
+          currentVT.stop();
+        }
+      }
+    } else {
+      const deviceId = this.currentDeviceId || this.videoDevices[0].deviceId;
+      this.library
+        .createLocalVideoTrack({
+          deviceId: { exact: deviceId },
+        })
+        .then((localVideoTrack: any) => {
+          localParticipant.publishTrack(localVideoTrack);
+          this.emit('participant-updated', null);
+        });
+    }
+  };
+  setLocalAudio(muted: boolean) {
+    return this.library.setLocalAudio(muted);
+  }
+
+  cycleCamera = () => {
+    const { localParticipant } = this.room;
+    const currentTrack = this.getLocalCurrentVideoTrack();
     const currentIndex = this.videoDevices.findIndex((device: any) => {
       return device.label === currentTrack.mediaStreamTrack.label;
     });
@@ -107,9 +179,26 @@ export default class Twilio extends VideoInterface {
         deviceId: { exact: this.videoDevices[nextIndex].deviceId },
       })
       .then((localVideoTrack: any) => {
-        localParticipant.unpublishTracks(currentTracks);
+        const localTrackPublication = localParticipant.unpublishTrack(
+          currentTrack,
+        );
+        localParticipant.emit('trackUnpublished', localTrackPublication);
+        currentTrack.stop();
         localParticipant.publishTrack(localVideoTrack);
         this.emit('participant-updated', null);
       });
+  };
+
+  getDeviceIDBYlabel = (label: string) => {
+    return this.videoDevices.find((device: any) => device.label === label)
+      .deviceId;
+  };
+
+  getLocalCurrentVideoTrack = () => {
+    const { localParticipant } = this.room;
+    const currentTracks = Array.from(localParticipant.videoTracks.values()).map(
+      (track: any) => track.track,
+    );
+    return currentTracks.find((track: any) => track.isStarted);
   };
 }

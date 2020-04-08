@@ -22,6 +22,12 @@ export default class DailyCo extends VideoInterface {
       this.emit('error', e);
     });
   }
+  setLocalVideo(muted: boolean) {
+    return this.library.setLocalVideo(muted);
+  }
+  setLocalAudio(muted: boolean) {
+    return this.library.setLocalAudio(muted);
+  }
   join(config: any) {
     return this.library.join(config);
   }
