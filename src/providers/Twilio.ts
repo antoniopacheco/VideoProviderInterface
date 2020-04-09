@@ -24,6 +24,22 @@ export default class Twilio extends VideoInterface {
     });
   };
 
+  addListenerToParticipant = (participant: any) => {
+    participant.on('trackUnpublished', (track: any) => {
+      this.emit('participant-updated', 'trackUnpublished');
+    });
+    participant.on('trackPublished', (track: any) => {
+      this.emit('participant-updated', 'trackPublished');
+    });
+    participant.on('trackSubscribed', (track: any) => {
+      // debugger;
+      this.emit('participant-updated', 'trackSubscribed');
+    });
+    participant.on('trackUnsubscribed', (track: any) => {
+      this.emit('participant-updated', 'trackUnsubscribed');
+    });
+  };
+
   addEventListeners = () => {
     // participantConnected happens when a new participant comes in
     this.room.on('participantConnected', (participant: any) => {
@@ -37,19 +53,11 @@ export default class Twilio extends VideoInterface {
       }
       this.emit('participant-joined', participant);
     });
+    this.room.participants.forEach((participant: any) => {
+      this.addListenerToParticipant(participant);
+    });
     // events for when local participant change
-    this.room.localParticipant.on('trackUnpublished', (track: any) => {
-      this.emit('participant-updated', 'trackUnpublished');
-    });
-    this.room.localParticipant.on('trackPublished', (track: any) => {
-      this.emit('participant-updated', 'trackPublished');
-    });
-    this.room.localParticipant.on('trackSubscribed', (track: any) => {
-      this.emit('participant-updated', track);
-    });
-    this.room.localParticipant.on('trackUnsubscribed', (track: any) => {
-      this.emit('participant-updated', track);
-    });
+    this.addListenerToParticipant(this.room.localParticipant);
 
     // this.room.once('disconnected', (error: any) =>
     //   this.room.participants.forEach((e: any) => {
