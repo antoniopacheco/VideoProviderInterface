@@ -87,23 +87,25 @@ clear all events
 VP.clearListeners();
 ```
 
-## features supported
+## Features supported
 
 EE = Everyone Else
 
-| Feature            | Function Name          | DailyCo            | Twilio             |
-| ------------------ | ---------------------- | ------------------ | ------------------ |
-| Join               | join(config)           | :heavy_check_mark: | :heavy_check_mark: |
-| Leave              | leave()                | :heavy_check_mark: | :heavy_check_mark: |
-| Mute Camera        | setLocalVideo(Boolean) | :heavy_check_mark: | :heavy_check_mark: |
-| Mute Audio         | setLocalAudio(Boolean) | :heavy_check_mark: | :heavy_check_mark: |
-| Cycle Camera       | cycleCamera()          | :heavy_check_mark: | :heavy_check_mark: |
-| start ScreenShare  | startScreenShare()     | :heavy_check_mark: | :heavy_check_mark: |
-| List Video devices | getVideoDevices()      | :heavy_check_mark: | :heavy_check_mark: |
-| List Audio devices | getAudioDevices()      | :heavy_check_mark: | :heavy_check_mark: |
-| Select Camera      | selectCamera(deviceId) | :soon:             | :soon:             |
-| get Cameras        | getCameras()           | :soon:             | :soon:             |
-| mute EE Audio      | muteEEAudio()          | :soon:             | :soon:             |
-| mute EE Video      | muteEEVideo()          | :soon:             | :soon:             |
-| kick out           | kick(id)               | :soon:             | :soon:             |
-| Adjust Volume      | setVolume(level)       | :soon:             | :soon:             |
+| Feature                     | Function Name                           | DailyCo            | Twilio             |
+| --------------------------- | --------------------------------------- | ------------------ | ------------------ |
+| Join                        | join(config)                            | :heavy_check_mark: | :heavy_check_mark: |
+| Leave                       | leave()                                 | :heavy_check_mark: | :heavy_check_mark: |
+| Mute Camera                 | setLocalVideo(Boolean)                  | :heavy_check_mark: | :heavy_check_mark: |
+| Mute Audio                  | setLocalAudio(Boolean)                  | :heavy_check_mark: | :heavy_check_mark: |
+| Cycle Camera                | cycleCamera()                           | :heavy_check_mark: | :heavy_check_mark: |
+| start ScreenShare           | startScreenShare()                      | :heavy_check_mark: | :heavy_check_mark: |
+| List Video devices          | getVideoDevices()                       | :heavy_check_mark: | :heavy_check_mark: |
+| List Audio devices          | getAudioDevices()                       | :heavy_check_mark: | :heavy_check_mark: |
+| Select Camera               | selectCamera(deviceId)                  | :heavy_check_mark: | :soon:             |
+| Select Audio                | selectAudio(deviceId)                   | :heavy_check_mark: | :soon:             |
+| mute EE Audio               | muteEEAudio()                           | :soon:             | :soon:             |
+| mute EE Video               | muteEEVideo()                           | :soon:             | :soon:             |
+| kick out                    | kick(id)                                | :soon:             | :soon:             |
+| Adjust Volume               | setVolume(level)                        | :soon:             | :soon:             |
+| Active Speaker Mode         | setActiveSpeakerView(level)             | :soon:             | :soon:             |
+| Present Custom Video Stream | sendCustomStream(streamMedia,presenter) | :soon:             | :soon:             |

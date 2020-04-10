@@ -306,4 +306,20 @@ export default class Twilio extends VideoInterface {
     );
     return currentTracks.find((track: any) => track.isStarted);
   };
+
+  selectAudio = (deviceId: string) => {
+    // TODO
+    // Check if is a valid Device
+    // Stop Current Audio
+    // Create a new Stream Track
+    // Attach Stream Track to localParticipant
+  };
+
+  selectCamera = (deviceId: string) => {
+    // TODO
+    // Check if is a valid Device
+    // Stop Current Video
+    // Create a new Stream Track
+    // Attach Stream Track to localParticipant
+  };
 }

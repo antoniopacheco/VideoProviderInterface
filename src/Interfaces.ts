@@ -24,6 +24,8 @@ export abstract class VideoInterface {
   abstract cycleCamera(): void;
   abstract setLocalVideo(mute: boolean): void;
   abstract setLocalAudio(mute: boolean): void;
+  abstract selectCamera(deviceId: string): void;
+  abstract selectAudio(deviceId: string): void;
 
   askPermissions = async () => {
     navigator.mediaDevices
