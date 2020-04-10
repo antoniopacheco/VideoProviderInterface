@@ -8,21 +8,8 @@ interface MediaStreamTrackPublishOptions {
 }
 
 export default class Twilio extends VideoInterface {
-  constructor(props: any) {
-    super(props);
-    this.createVideoDevices();
-  }
   room: any;
-  videoDevices: any[] = [];
   currentDeviceId: string = '';
-
-  createVideoDevices = () => {
-    navigator.mediaDevices.enumerateDevices().then((devices: any[]) => {
-      this.videoDevices = devices.filter(
-        (device: any) => device.kind === 'videoinput',
-      );
-    });
-  };
 
   addListenerToParticipant = (participant: any) => {
     participant.on('trackUnpublished', (track: any) => {
@@ -32,7 +19,6 @@ export default class Twilio extends VideoInterface {
       this.emit('participant-updated', 'trackPublished');
     });
     participant.on('trackSubscribed', (track: any) => {
-      // debugger;
       this.emit('participant-updated', 'trackSubscribed');
     });
     participant.on('trackUnsubscribed', (track: any) => {

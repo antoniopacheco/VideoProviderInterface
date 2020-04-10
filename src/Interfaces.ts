@@ -8,8 +8,11 @@ export interface Participant {
 export abstract class VideoInterface {
   library: any;
   listeners: any = {};
+  videoDevices: any[] = [];
+  audioDevices: any[] = [];
   constructor(props: any) {
     this.library = props.library;
+    this.initDevices();
   }
   abstract join(config: any): void;
   abstract leave(): void;
@@ -21,6 +24,32 @@ export abstract class VideoInterface {
   abstract cycleCamera(): void;
   abstract setLocalVideo(mute: boolean): void;
   abstract setLocalAudio(mute: boolean): void;
+
+  initDevices = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    this.videoDevices = devices.filter(
+      (device) => device.kind === 'videoinput',
+    );
+    this.audioDevices = devices.filter(
+      (device) => device.kind === 'audiooutput',
+    );
+    this.emit('devices-changed', event);
+  };
+
+  startDeviceListener = () => {
+    // Listen for changes to media devices and update the list accordingly
+    navigator.mediaDevices.addEventListener('devicechange', (event) => {
+      this.initDevices();
+    });
+  };
+
+  getVideoDevices = () => {
+    return this.videoDevices;
+  };
+
+  getAudioDevices = () => {
+    return this.audioDevices;
+  };
 
   addListener(name: string, callBack: any, oneTime: boolean): any {
     if (!this.listeners[name]) {
