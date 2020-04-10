@@ -9,7 +9,8 @@ interface MediaStreamTrackPublishOptions {
 
 export default class Twilio extends VideoInterface {
   room: any;
-  currentDeviceId: string = '';
+  currentVideoDeviceID: string = '';
+  currentAudioDeviceID: string = '';
 
   addListenerToParticipant = (participant: any) => {
     participant.on('trackUnpublished', (track: any) => {
@@ -70,6 +71,7 @@ export default class Twilio extends VideoInterface {
   }
 
   leave() {
+    this.setLocalVideo(true);
     this.room.disconnect();
   }
   destroy() {
@@ -193,7 +195,7 @@ export default class Twilio extends VideoInterface {
         const currentVT = this.getLocalCurrentVideoTrack();
         if (currentVT) {
           // we save current this.currentDeviceId
-          this.currentDeviceId = this.getDeviceIDBYlabel(
+          this.currentVideoDeviceID = this.getDeviceIDByLabel(
             currentVT.mediaStreamTrack.label,
           );
           const localTrackPublication = localParticipant.unpublishTrack(
@@ -205,7 +207,8 @@ export default class Twilio extends VideoInterface {
         }
       }
     } else {
-      const deviceId = this.currentDeviceId || this.videoDevices[0].deviceId;
+      const deviceId =
+        this.currentVideoDeviceID || this.videoDevices[0].deviceId;
       this.library
         .createLocalVideoTrack({
           deviceId: { exact: deviceId },
@@ -217,16 +220,32 @@ export default class Twilio extends VideoInterface {
     }
   };
   setLocalAudio(mute: boolean) {
-    const [audioTrack, video] = this.getTracksFromParticipant(
-      this.room.localParticipant,
-    );
-    if (audioTrack) {
-      if (mute) {
-        audioTrack.enabled = false;
-      } else {
-        audioTrack.enabled = true;
-      }
-      this.emit('participant-updated', 'audio-changed');
+    const { localParticipant } = this.room;
+    if (mute) {
+      const [audioTrack, video] = this.getTracksFromParticipant(
+        localParticipant,
+      );
+
+      audioTrack.enabled = false;
+      this.currentAudioDeviceID = this.getDeviceIDByLabel(
+        audioTrack.label,
+        false,
+      );
+      const localTrackPublication = localParticipant.unpublishTrack(audioTrack);
+      this.emit('participant-updated', 'manually on setLocalAudio');
+      localParticipant.emit('trackUnpublished', localTrackPublication);
+      audioTrack.enabled = false;
+    } else {
+      const deviceId =
+        this.currentAudioDeviceID || this.audioDevices[0].deviceId;
+      this.library
+        .createLocalAudioTrack({
+          deviceId: { exact: deviceId },
+        })
+        .then((localAudioTrack: any) => {
+          localParticipant.publishTrack(localAudioTrack);
+          this.emit('participant-updated', 'manually on mute');
+        });
     }
   }
 
@@ -253,8 +272,12 @@ export default class Twilio extends VideoInterface {
       });
   };
 
-  getDeviceIDBYlabel = (label: string) => {
-    return this.videoDevices.find((device: any) => device.label === label)
+  getDeviceIDByLabel = (label: string, video = true) => {
+    if (video) {
+      return this.videoDevices.find((device: any) => device.label === label)
+        .deviceId;
+    }
+    return this.audioDevices.find((device: any) => device.label === label)
       .deviceId;
   };
 

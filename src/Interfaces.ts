@@ -31,7 +31,7 @@ export abstract class VideoInterface {
       (device) => device.kind === 'videoinput',
     );
     this.audioDevices = devices.filter(
-      (device) => device.kind === 'audiooutput',
+      (device) => device.kind === 'audioinput',
     );
     this.emit('devices-changed', event);
   };

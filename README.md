@@ -96,7 +96,7 @@ EE = Everyone Else
 | Join               | join(config)           | :heavy_check_mark: | :heavy_check_mark: |
 | Leave              | leave()                | :heavy_check_mark: | :heavy_check_mark: |
 | Mute Camera        | setLocalVideo(Boolean) | :heavy_check_mark: | :heavy_check_mark: |
-| Mute Audio         | setLocalAudio(Boolean) | :heavy_check_mark: | :soon:             |
+| Mute Audio         | setLocalAudio(Boolean) | :heavy_check_mark: | :heavy_check_mark: |
 | Cycle Camera       | cycleCamera()          | :heavy_check_mark: | :heavy_check_mark: |
 | start ScreenShare  | startScreenShare()     | :heavy_check_mark: | :heavy_check_mark: |
 | List Video devices | getVideoDevices()      | :heavy_check_mark: | :heavy_check_mark: |
