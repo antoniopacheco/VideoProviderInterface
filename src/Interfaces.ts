@@ -12,7 +12,7 @@ export abstract class VideoInterface {
   audioDevices: any[] = [];
   constructor(props: any) {
     this.library = props.library;
-    this.initDevices();
+    this.askPermissions();
   }
   abstract join(config: any): void;
   abstract leave(): void;
@@ -24,6 +24,14 @@ export abstract class VideoInterface {
   abstract cycleCamera(): void;
   abstract setLocalVideo(mute: boolean): void;
   abstract setLocalAudio(mute: boolean): void;
+
+  askPermissions = async () => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then(this.initDevices, (e) => {
+        this.emit('error', 'permissions denied');
+      });
+  };
 
   initDevices = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices();

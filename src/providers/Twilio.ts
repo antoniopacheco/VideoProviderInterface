@@ -273,12 +273,21 @@ export default class Twilio extends VideoInterface {
   };
 
   getDeviceIDByLabel = (label: string, video = true) => {
+    let device = null;
     if (video) {
-      return this.videoDevices.find((device: any) => device.label === label)
-        .deviceId;
+      device = this.videoDevices.find((d: any) => d.label === label);
+      if (device) {
+        return device.deviceId;
+      } else {
+        return null;
+      }
     }
-    return this.audioDevices.find((device: any) => device.label === label)
-      .deviceId;
+    device = this.audioDevices.find((d: any) => d.label === label);
+    if (device) {
+      return device.deviceId;
+    } else {
+      return null;
+    }
   };
 
   // get  share screen
