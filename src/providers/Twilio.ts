@@ -72,6 +72,7 @@ export default class Twilio extends VideoInterface {
 
   leave() {
     this.setLocalVideo(true);
+    this.setLocalAudio(true);
     this.room.disconnect();
   }
   destroy() {
@@ -81,7 +82,7 @@ export default class Twilio extends VideoInterface {
   startScreenShare = () => {
     (navigator as any).mediaDevices
       .getDisplayMedia({
-        audio: false,
+        audio: true,
         video: {
           frameRate: 10,
           height: 1080,
