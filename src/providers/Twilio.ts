@@ -74,6 +74,7 @@ export default class Twilio extends VideoInterface {
     this.setLocalVideo(true);
     this.setLocalAudio(true);
     this.room.disconnect();
+    this.emit('left', null);
   }
   destroy() {
     // TODO
