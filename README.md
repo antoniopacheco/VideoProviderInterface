@@ -108,4 +108,4 @@ EE = Everyone Else
 | kick out                    | kick(id)                                | :soon:             | :soon:             |
 | Adjust Volume               | setVolume(level)                        | :soon:             | :soon:             |
 | Active Speaker Mode         | setActiveSpeakerView(level)             | :soon:             | :soon:             |
-| Present Custom Video Stream | sendCustomStream(streamMedia,presenter) | :soon:             | :soon:             |
+| Present Custom Video Stream | sendCustomStream(streamMedia,presenter) | :soon:             | :heavy_check_mark: |
