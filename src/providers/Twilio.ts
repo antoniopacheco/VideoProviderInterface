@@ -156,7 +156,7 @@ export default class Twilio extends VideoInterface {
           id: key,
           audioTrack,
           videoTrack,
-          userName: local.identity,
+          userName: participant.identity,
           screenVideoTrack: screenVideoTrack
             ? screenVideoTrack.mediaStreamTrack
             : null,
