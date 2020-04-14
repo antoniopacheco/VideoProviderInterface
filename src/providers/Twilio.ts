@@ -138,6 +138,7 @@ export default class Twilio extends VideoInterface {
       id: 'local',
       audioTrack: localAudioTrack,
       videoTrack: localVideoTrack,
+      userName: local.identity,
       screenVideoTrack: localShareScreen
         ? localShareScreen.mediaStreamTrack
         : null,
@@ -155,6 +156,7 @@ export default class Twilio extends VideoInterface {
           id: key,
           audioTrack,
           videoTrack,
+          userName: local.identity,
           screenVideoTrack: screenVideoTrack
             ? screenVideoTrack.mediaStreamTrack
             : null,
