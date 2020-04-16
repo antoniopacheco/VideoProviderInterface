@@ -7,11 +7,14 @@ export interface Participant {
 
 export abstract class VideoInterface {
   library: any;
+  libraryName: string;
   listeners: any = {};
   videoDevices: any[] = [];
   audioDevices: any[] = [];
+
   constructor(props: any) {
     this.library = props.library;
+    this.libraryName = props.libraryName;
     this.askPermissions();
   }
   abstract join(config: any): void;
@@ -107,5 +110,16 @@ export abstract class VideoInterface {
   }
   clearListeners(): void {
     this.listeners = {};
+  }
+
+  logger(
+    eventList: string[],
+    callBack: (libName: string, eventName: string, eventProps: any) => void,
+  ) {
+    eventList.forEach((event) => {
+      this.on(event, (props: any) => {
+        callBack(this.libraryName, event, props);
+      });
+    });
   }
 }

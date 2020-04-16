@@ -87,6 +87,15 @@ clear all events
 VP.clearListeners();
 ```
 
+## Utils
+
+### LoggerCallBack
+```jsx
+    VP.logger([eventList],(event, provider, props)=>{
+        console.log(event,providers, props)
+    })
+```
+
 ## Features supported
 
 EE = Everyone Else
