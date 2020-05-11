@@ -314,17 +314,62 @@ export default class Twilio extends VideoInterface {
   selectAudio = (deviceId: string) => {
     // TODO
     // Check if is a valid Device
+    const audioDevicesIds = this.audioDevices.map((x) => x.deviceId);
+    if (!audioDevicesIds.includes(deviceId)) {
+      this.emit('error', 'Device Not Found');
+      return;
+    }
+    const { localParticipant } = this.room;
+    if (!localParticipant) {
+      return;
+    }
     // Stop Current Audio
+    this.setLocalAudio(true);
     // Create a new Stream Track
+    this.library
+      .createLocalAudioTrack({
+        deviceId: { exact: deviceId },
+      })
+      .then((localAudioTrack: any) => {
+        localParticipant.publishTrack(localAudioTrack);
+        this.emit('participant-updated', 'audio device Selected');
+      });
     // Attach Stream Track to localParticipant
   };
 
   selectCamera = (deviceId: string) => {
     // TODO
     // Check if is a valid Device
+    const videoDevicesIds = this.videoDevices.map((x) => x.deviceId);
+    if (!videoDevicesIds.includes(deviceId)) {
+      this.emit('error', 'Device Not Found');
+      return;
+    }
+    const { localParticipant } = this.room;
+    if (!localParticipant) {
+      return;
+    }
     // Stop Current Video
+    const currentVT = this.getLocalCurrentVideoTrack();
+    if (currentVT) {
+      const localTrackPublication = localParticipant.unpublishTrack(currentVT);
+      localParticipant.emit('trackUnpublished', localTrackPublication);
+      currentVT.stop();
+    }
+
     // Create a new Stream Track
-    // Attach Stream Track to localParticipant
+    this.library
+      .createLocalVideoTrack({
+        deviceId: { exact: deviceId },
+      })
+      .then((localVideoTrack: any) => {
+        // Attach Stream Track to localParticipant
+        localParticipant.publishTrack(localVideoTrack);
+        this.emit('participant-updated', 'choose video source');
+      })
+      .catch((e: Error) => {
+        this.emit('error', e);
+      });
   };
 
   sendCustomStream = (stream: any) => {
