@@ -72,12 +72,6 @@ export abstract class VideoInterface {
       oneTime,
       callBack,
     });
-
-    return {
-      remove: () => {
-        this.listeners[name].splice(this.listeners[name].length - 1, 1);
-      },
-    };
   }
 
   on(name: string, callBack: any): any {
@@ -86,7 +80,9 @@ export abstract class VideoInterface {
 
   off(name: string, callBack: any): void {
     if (this.listeners[name]) {
-      this.listeners[name].findIndex((el: any) => el.callBack === callBack);
+      this.listeners[name] = this.listeners[name].filter(
+        (el: any) => el.callBack !== callBack,
+      );
     }
   }
 
@@ -96,15 +92,11 @@ export abstract class VideoInterface {
 
   emit(name: string, params: any): void {
     if (this.listeners[name]) {
-      const indexesToDelete: any[] = [];
       this.listeners[name].forEach((action: any, index: number) => {
         action.callBack(params);
         if (action.oneTime) {
-          indexesToDelete.push(index);
+          this.off(name, action.callBack);
         }
-      });
-      indexesToDelete.forEach((i) => {
-        this.listeners[name].splice(i, 1);
       });
     }
   }

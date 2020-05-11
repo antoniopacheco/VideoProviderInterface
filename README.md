@@ -4,6 +4,7 @@ List of supported providers
 
 - daily.co
 - twilio
+- Jitsi (In progress)
 
 npm install --save video-provider-interface
 
@@ -100,21 +101,21 @@ VP.clearListeners();
 
 EE = Everyone Else
 
-| Feature                     | Function Name                           | DailyCo            | Twilio             |
-| --------------------------- | --------------------------------------- | ------------------ | ------------------ |
-| Join                        | join(config)                            | :heavy_check_mark: | :heavy_check_mark: |
-| Leave                       | leave()                                 | :heavy_check_mark: | :heavy_check_mark: |
-| Mute Camera                 | setLocalVideo(Boolean)                  | :heavy_check_mark: | :heavy_check_mark: |
-| Mute Audio                  | setLocalAudio(Boolean)                  | :heavy_check_mark: | :heavy_check_mark: |
-| Cycle Camera                | cycleCamera()                           | :heavy_check_mark: | :heavy_check_mark: |
-| start ScreenShare           | startScreenShare()                      | :heavy_check_mark: | :heavy_check_mark: |
-| List Video devices          | getVideoDevices()                       | :heavy_check_mark: | :heavy_check_mark: |
-| List Audio devices          | getAudioDevices()                       | :heavy_check_mark: | :heavy_check_mark: |
-| Select Camera               | selectCamera(deviceId)                  | :heavy_check_mark: | :soon:             |
-| Select Audio                | selectAudio(deviceId)                   | :heavy_check_mark: | :soon:             |
-| mute EE Audio               | muteEEAudio()                           | :soon:             | :soon:             |
-| mute EE Video               | muteEEVideo()                           | :soon:             | :soon:             |
-| kick out                    | kick(id)                                | :soon:             | :soon:             |
-| Adjust Volume               | setVolume(level)                        | :soon:             | :soon:             |
-| Active Speaker Mode         | setActiveSpeakerView(level)             | :soon:             | :soon:             |
-| Present Custom Video Stream | sendCustomStream(streamMedia,presenter) | :soon:             | :heavy_check_mark: |
+| Feature                     | Function Name                           | DailyCo            | Twilio             | Jitsi  |
+| --------------------------- | --------------------------------------- | ------------------ | ------------------ | ------ |
+| Join                        | join(config)                            | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| Leave                       | leave()                                 | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| Mute Camera                 | setLocalVideo(Boolean)                  | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| Mute Audio                  | setLocalAudio(Boolean)                  | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| Cycle Camera                | cycleCamera()                           | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| start ScreenShare           | startScreenShare()                      | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| List Video devices          | getVideoDevices()                       | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| List Audio devices          | getAudioDevices()                       | :heavy_check_mark: | :heavy_check_mark: | :soon: |
+| Select Camera               | selectCamera(deviceId)                  | :heavy_check_mark: | :soon:             | :soon: |
+| Select Audio                | selectAudio(deviceId)                   | :heavy_check_mark: | :soon:             | :soon: |
+| mute EE Audio               | muteEEAudio()                           | :soon:             | :soon:             | :soon: |
+| mute EE Video               | muteEEVideo()                           | :soon:             | :soon:             | :soon: |
+| kick out                    | kick(id)                                | :soon:             | :soon:             | :soon: |
+| Adjust Volume               | setVolume(level)                        | :soon:             | :soon:             | :soon: |
+| Active Speaker Mode         | setActiveSpeakerView(level)             | :soon:             | :soon:             | :soon: |
+| Present Custom Video Stream | sendCustomStream(streamMedia,presenter) | :soon:             | :heavy_check_mark: | :soon: |
