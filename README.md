@@ -32,6 +32,14 @@ import VideoProvider from 'video-provider-interface';
 const VP = new VideoProvider(Video, 'twilio');
 ```
 
+for a custom provider you can always import VideoInterface
+
+```jsx
+import { VideoInterface } from 'video-provider-interface';
+
+class MyCustomProvider extends VideoInterface {}
+```
+
 ## methods:
 
 - join(config: any): void; // VP.join({url: dailyCoURL})
@@ -91,10 +99,11 @@ VP.clearListeners();
 ## Utils
 
 ### LoggerCallBack
+
 ```jsx
-    VP.logger([eventList],(event, provider, props)=>{
-        console.log(event,providers, props)
-    })
+VP.logger([eventList], (event, provider, props) => {
+  console.log(event, providers, props);
+});
 ```
 
 ## Features supported

@@ -2,6 +2,7 @@ import DailyCo from './providers/Dailyco';
 import Twilio from './providers/Twilio';
 import Jitsi from './providers/Jitsi';
 
+export { VideoInterface } from './Interfaces';
 export default class VideoProvider {
   constructor(libraryPackage: any, libraryName: string) {
     switch (libraryName) {
