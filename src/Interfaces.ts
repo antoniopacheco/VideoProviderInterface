@@ -1,3 +1,4 @@
+import getCompatibleResolutions from './getResolution';
 export interface Participant {
   videoTrack: any;
   audioTrack: any;
@@ -28,7 +29,7 @@ export abstract class VideoInterface {
   abstract cycleCamera(): void;
   abstract setLocalVideo(mute: boolean): void;
   abstract setLocalAudio(mute: boolean): void;
-  abstract selectCamera(deviceId: string): void;
+  abstract selectCamera(deviceId: string, constrains: any): void;
   abstract selectAudio(deviceId: string): void;
 
   askPermissions = async () => {
@@ -37,6 +38,13 @@ export abstract class VideoInterface {
       .then(this.initDevices, (e) => {
         this.emit('error', 'permissions denied');
       });
+  };
+
+  getResolutions = async () => {
+    this.videoDevices.forEach(async (videoDevice) => {
+      const res = await getCompatibleResolutions(videoDevice);
+      videoDevice.availableRes = res;
+    });
   };
 
   initDevices = async () => {
@@ -50,6 +58,7 @@ export abstract class VideoInterface {
     this.audioOutputDevices = devices.filter(
       (device) => device.kind === 'audiooutput',
     );
+    this.getResolutions();
     this.emit('devices-changed', event);
   };
 

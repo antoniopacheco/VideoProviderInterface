@@ -57,7 +57,7 @@ export default class DailyCo extends VideoInterface {
     return this.library.cycleCamera();
   }
 
-  selectCamera(videoDeviceId: string) {
+  selectCamera(videoDeviceId: string, constrains: any) {
     this.library.setInputDevices({ videoDeviceId });
   }
 

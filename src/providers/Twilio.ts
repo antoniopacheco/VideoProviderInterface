@@ -339,7 +339,7 @@ export default class Twilio extends VideoInterface {
     // Attach Stream Track to localParticipant
   };
 
-  selectCamera = (deviceId: string) => {
+  selectCamera = (deviceId: string, constrains: any) => {
     // TODO
     // Check if is a valid Device
     const videoDevicesIds = this.videoDevices.map((x) => x.deviceId);
@@ -360,10 +360,14 @@ export default class Twilio extends VideoInterface {
     }
 
     // Create a new Stream Track
+    const options: any = {
+      deviceId: { exact: deviceId },
+    };
+    if (constrains) {
+      options.constrains = constrains;
+    }
     this.library
-      .createLocalVideoTrack({
-        deviceId: { exact: deviceId },
-      })
+      .createLocalVideoTrack(options)
       .then((localVideoTrack: any) => {
         // Attach Stream Track to localParticipant
         localParticipant.publishTrack(localVideoTrack);
