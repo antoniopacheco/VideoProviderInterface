@@ -11,6 +11,7 @@ export abstract class VideoInterface {
   listeners: any = {};
   videoDevices: any[] = [];
   audioDevices: any[] = [];
+  audioOutputDevices: any[] = [];
 
   constructor(props: any) {
     this.library = props.library;
@@ -46,6 +47,9 @@ export abstract class VideoInterface {
     this.audioDevices = devices.filter(
       (device) => device.kind === 'audioinput',
     );
+    this.audioOutputDevices = devices.filter(
+      (device) => device.kind === 'audiooutput',
+    );
     this.emit('devices-changed', event);
   };
 
@@ -62,6 +66,10 @@ export abstract class VideoInterface {
 
   getAudioDevices = () => {
     return this.audioDevices;
+  };
+
+  getAudioOutputDevices = () => {
+    return this.audioOutputDevices;
   };
 
   addListener(name: string, callBack: any, oneTime: boolean): any {
