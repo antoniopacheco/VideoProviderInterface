@@ -47,7 +47,7 @@ export abstract class VideoInterface {
     });
   };
 
-  initDevices = async () => {
+  initDevices = async (event: any) => {
     const devices = await navigator.mediaDevices.enumerateDevices();
     this.videoDevices = devices.filter(
       (device) => device.kind === 'videoinput',
@@ -65,7 +65,7 @@ export abstract class VideoInterface {
   startDeviceListener = () => {
     // Listen for changes to media devices and update the list accordingly
     navigator.mediaDevices.addEventListener('devicechange', (event) => {
-      this.initDevices();
+      this.initDevices(event);
     });
   };
 
