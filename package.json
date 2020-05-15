@@ -1,10 +1,11 @@
 {
   "name": "video-provider-interface",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Interface to switch between different video Stream Providers",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "start": "tsc && nodemon",
     "test": "jest --config jestconfig.json",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -14,6 +15,19 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm run build",
+    "ext": "ts"
   },
   "repository": {
     "type": "git",
@@ -28,6 +42,7 @@
     "@types/jest": "^25.2.1",
     "esnext": "^3.3.1",
     "jest": "^25.2.7",
+    "nodemon": "^2.0.4",
     "prettier": "^2.0.4",
     "ts-jest": "^25.3.1",
     "tslint": "^6.1.1",

@@ -57,6 +57,16 @@ export default class Twilio extends VideoInterface {
     });
   };
 
+  getActiveVideoTrack = () => {
+    return [...this.room.localParticipant.videoTracks.values()]
+      .filter((x) => x.kind === 'video' && x.trackName != 'screen')
+      .map((localVideo) => localVideo.track)[1];
+  };
+
+  getActiveAudioInput = () => {
+    return [...this.room.localParticipant.audioTracks.values()][0];
+  };
+
   join(config: any) {
     this.library
       .connect(config.token, { name: config.roomName })

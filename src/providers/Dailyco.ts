@@ -65,6 +65,10 @@ export default class DailyCo extends VideoInterface {
     this.library.setInputDevices({ audioDeviceId });
   }
 
+  setOutputDevice(outputDeviceId: string) {
+    this.library.setOutputDevice({ outputDeviceId });
+  }
+
   participants() {
     return Object.entries(this.library.participants()).reduce(
       (ac: any[], [key, val]: [string, any]) => {
