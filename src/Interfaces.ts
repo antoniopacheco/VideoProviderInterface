@@ -1,4 +1,4 @@
-import getCompatibleResolutions from './getResolution';
+import getCompatibleResolutions, { resolution } from './getResolution';
 export interface Participant {
   videoTrack: any;
   audioTrack: any;
@@ -6,13 +6,30 @@ export interface Participant {
   isLocal: boolean;
 }
 
+interface videoDevices extends MediaDeviceInfo {
+  availableRes?: resolution[];
+}
+
+interface CallbackOneParam {
+  (param?: any): any;
+}
+
+interface listener {
+  oneTime: boolean;
+  callBack: CallbackOneParam;
+}
+
+interface listenerMap {
+  [key: string]: listener[];
+}
+
 export abstract class VideoInterface {
   library: any;
   libraryName: string;
-  listeners: any = {};
-  videoDevices: any[] = [];
-  audioDevices: any[] = [];
-  audioOutputDevices: any[] = [];
+  listeners: listenerMap = {};
+  videoDevices: videoDevices[] = [];
+  audioDevices: MediaDeviceInfo[] = [];
+  audioOutputDevices: MediaDeviceInfo[] = [];
 
   constructor(props: any) {
     this.library = props.library;
@@ -48,7 +65,8 @@ export abstract class VideoInterface {
   };
 
   initDevices = async (event: any) => {
-    const devices = await navigator.mediaDevices.enumerateDevices();
+    const devices: MediaDeviceInfo[] = await navigator.mediaDevices.enumerateDevices();
+
     this.videoDevices = devices.filter(
       (device) => device.kind === 'videoinput',
     );
@@ -69,19 +87,19 @@ export abstract class VideoInterface {
     });
   };
 
-  getVideoDevices = () => {
+  getVideoDevices = (): videoDevices[] => {
     return this.videoDevices;
   };
 
-  getAudioDevices = () => {
+  getAudioDevices = (): MediaDeviceInfo[] => {
     return this.audioDevices;
   };
 
-  getAudioOutputDevices = () => {
+  getAudioOutputDevices = (): MediaDeviceInfo[] => {
     return this.audioOutputDevices;
   };
 
-  addListener(name: string, callBack: any, oneTime: boolean): any {
+  addListener(name: string, callBack: any, oneTime: boolean): void {
     if (!this.listeners[name]) {
       this.listeners[name] = [];
     }
@@ -91,8 +109,8 @@ export abstract class VideoInterface {
     });
   }
 
-  on(name: string, callBack: any): any {
-    return this.addListener(name, callBack, false);
+  on(name: string, callBack: any): void {
+    this.addListener(name, callBack, false);
   }
 
   off(name: string, callBack: any): void {
@@ -103,8 +121,8 @@ export abstract class VideoInterface {
     }
   }
 
-  once(name: string, callBack: any): any {
-    return this.addListener(name, callBack, true);
+  once(name: string, callBack: any): void {
+    this.addListener(name, callBack, true);
   }
 
   emit(name: string, params: any): void {

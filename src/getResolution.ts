@@ -1,3 +1,10 @@
+export interface resolution {
+  label: string;
+  width: number;
+  height: number;
+  ratio: string;
+}
+
 const quickScan = [
   {
     label: '4K(UHD)',
@@ -68,7 +75,7 @@ const quickScan = [
 ];
 let stream: any;
 
-const getCompatibleResolutions = async (device: any) => {
+const getCompatibleResolutions = async (device: any): Promise<resolution[]> => {
   const video = document.createElement('video');
   document.body.appendChild(video);
   const results = [];
