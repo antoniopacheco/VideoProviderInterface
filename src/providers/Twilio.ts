@@ -305,14 +305,14 @@ export default class Twilio extends VideoInterface {
       if (device) {
         return device.deviceId;
       } else {
-        return null;
+        return '';
       }
     }
     device = this.audioDevices.find((d: any) => d.label === label);
     if (device) {
       return device.deviceId;
     } else {
-      return null;
+      return '';
     }
   };
 

@@ -1,4 +1,4 @@
-export interface resolution {
+export interface Resolution {
   label: string;
   width: number;
   height: number;
@@ -75,7 +75,7 @@ const quickScan = [
 ];
 let stream: any;
 
-const getCompatibleResolutions = async (device: any): Promise<resolution[]> => {
+const getCompatibleResolutions = async (device: any): Promise<Resolution[]> => {
   const video = document.createElement('video');
   document.body.appendChild(video);
   const results = [];

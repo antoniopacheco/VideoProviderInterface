@@ -1,4 +1,4 @@
-import getCompatibleResolutions, { resolution } from './getResolution';
+import getCompatibleResolutions, { Resolution } from './getResolution';
 export interface Participant {
   videoTrack: any;
   audioTrack: any;
@@ -6,35 +6,32 @@ export interface Participant {
   isLocal: boolean;
 }
 
-interface videoDevices extends MediaDeviceInfo {
-  availableRes?: resolution[];
+interface VideoDevices extends MediaDeviceInfo {
+  availableRes?: Resolution[];
 }
 
-interface CallbackOneParam {
-  (param?: any): any;
-}
+type CallbackOneParam = (param?: any) => any;
 
-interface listener {
+interface Listener {
   oneTime: boolean;
   callBack: CallbackOneParam;
 }
 
-interface listenerMap {
-  [key: string]: listener[];
+interface ListenerMap {
+  [key: string]: Listener[];
 }
 
 export abstract class VideoInterface {
   library: any;
   libraryName: string;
-  listeners: listenerMap = {};
-  videoDevices: videoDevices[] = [];
+  listeners: ListenerMap = {};
+  videoDevices: VideoDevices[] = [];
   audioDevices: MediaDeviceInfo[] = [];
   audioOutputDevices: MediaDeviceInfo[] = [];
 
   constructor(props: any) {
     this.library = props.library;
     this.libraryName = props.libraryName;
-    this.askPermissions();
   }
   abstract join(config: any): void;
   abstract leave(): void;
@@ -87,7 +84,7 @@ export abstract class VideoInterface {
     });
   };
 
-  getVideoDevices = (): videoDevices[] => {
+  getVideoDevices = (): VideoDevices[] => {
     return this.videoDevices;
   };
 
