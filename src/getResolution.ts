@@ -124,6 +124,12 @@ const getCompatibleResolutions = async (device: any): Promise<Resolution[]> => {
     }
     await new Promise((resolve) => setTimeout(resolve, 0));
   }
+  // remove last stream
+  if (stream) {
+    stream.getTracks().forEach((track: any) => {
+      track.stop();
+    });
+  }
   document.body.removeChild(video);
 
   return results;
