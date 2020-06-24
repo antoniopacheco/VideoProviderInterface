@@ -61,7 +61,7 @@ export abstract class VideoInterface {
     });
   };
 
-  initDevices = async (event: any) => {
+  initDevices = async (event: any, avoidResolutions: boolean = false) => {
     const devices: MediaDeviceInfo[] = await navigator.mediaDevices.enumerateDevices();
 
     this.videoDevices = devices.filter(
@@ -73,7 +73,9 @@ export abstract class VideoInterface {
     this.audioOutputDevices = devices.filter(
       (device) => device.kind === 'audiooutput',
     );
-    this.getResolutions();
+    if (!avoidResolutions) {
+      this.getResolutions();
+    }
     this.emit('devices-changed', event);
   };
 
